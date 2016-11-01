@@ -1,0 +1,23 @@
+<html>
+	<header>
+    <title>
+      Gifsender
+    </title>
+  </header>
+	<body>
+	  Hey! Enter a phone number and a search term and we'll send it a gif!
+    <br>
+    <br>
+    <form id='messageForm'">
+      Phone Number:<br>
+      <input type="text" name="phonenumber" value="">
+      <br>
+      Search Term:<br>
+      <input type="text" name="message" value="">
+      <br><br>
+      <input type='button' onclick="return sendMessage(document.getElementById('messageForm'));" value="send me a gif!">
+      <!-- <input type="submit" value="Submit"> -->
+    </form>
+	</body>
+  <script src="js/app.js"></script>
+</html>
