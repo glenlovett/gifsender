@@ -13,14 +13,34 @@ end
 post '/sendmessage/:phonenumber/:message' do
   search_phrase = CGI.escape(params['message'])
   giphy_url = "http://api.giphy.com/v1/gifs/search?q=#{search_phrase}&api_key=dc6zaTOxFJmzC"
-  gif_url = JSON.parse(HTTP.get(giphy_url).body)['data'][0]['images']['fixed_width']['url']
+  # search_phrase = CGI.escape(params['message'])
+  # giphy_url = "http://api.giphy.com/v1/gifs/search?q=#{search_phrase}&api_key=dc6zaTOxFJmzC"
+  # gif_url = JSON.parse(HTTP.get(giphy_url).body)['data'][0]['images']['fixed_width']['url']
 
-  @twillio_client = Twilio::REST::Client.new config['twillio_account_sid'], config['twillio_auth_token']
+  # @twillio_client = Twilio::REST::Client.new config['twillio_account_sid'], config['twillio_auth_token']
 
-  @twillio_client.account.messages.create(
-    from: config['twillio_from_number'],
-    to: "+1#{params['phonenumber']}",
-    body: "Here's your gif of \"#{params['message']}\" from gifsender!",
-    media_url: gif_url
-  )
+  # @twillio_client.account.messages.create(
+  #   from: config['twillio_from_number'],
+  #   to: "+1#{params['phonenumber']}",
+  #   body: "Here's your gif of \"#{params['message']}\" from gifsender!",
+  #   media_url: gif_url
+  # )
+  giphy_results = JSON.parse(HTTP.get(giphy_url).body)
+
+  if (giphy_results != nil) && (giphy_results['data'].length > 0)
+    # we found at least one gif
+    gif_url = giphy_results['data'][0]['images']['original']['url']
+
+    @twillio_client = Twilio::REST::Client.new config['twillio_account_sid'], config['twillio_auth_token']
+
+    @twillio_client.account.messages.create(
+      from: config['twillio_from_number'],
+      to: "+1#{params['phonenumber']}",
+      body: "Here's your gif of \"#{params['message']}\" from GifSend!",
+      media_url: gif_url
+    )
+  else
+    # status code for empty result
+    status 204
+  end
 end
