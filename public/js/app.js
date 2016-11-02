@@ -3,6 +3,11 @@ function sendMessage(form) {
   var request = new XMLHttpRequest();
   var URL = encodeURI("/sendmessage/" + form.phonenumber.value + "/" + form.message.value);
 
+  if (form.phonenumber.value === "" || form.message.value === "") {
+    sendButton.text('Provide both values and try again.');
+    return;
+  }
+
   // If we're already sending a gif, return without doing anything
   if (sendButton.hasClass('disabled-button')) {
     return;
