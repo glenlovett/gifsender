@@ -17,7 +17,7 @@ post '/sendmessage/:phonenumber/:message' do
 
   if (giphy_results != nil) && (giphy_results['data'].length > 0)
     #we found at least one gif
-    gif_url = JSON.parse(HTTP.get(giphy_url).body)['data'][0]['images']['fixed_width']['url']
+    gif_url = JSON.parse(HTTP.get(giphy_url).body)['data'][0]['images']['fixed_width_downsampled']['url']
 
     begin
       @twillio_client = Twilio::REST::Client.new config['twillio_account_sid'], config['twillio_auth_token']
