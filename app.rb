@@ -29,6 +29,7 @@ post '/sendmessage/:phonenumber/:message' do
       )
     rescue Twilio::REST::RequestError => e
       puts e.message
+      status 500
     end
   else
     # status code for empty result
